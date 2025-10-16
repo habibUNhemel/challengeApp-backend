@@ -12,6 +12,8 @@ module Api
         render json: @challenges
       end
 
+# path query parameters
+
       # GET api/v1/challenges/:id (details of a single challenge)
       def show
         # Show single challenge
@@ -68,7 +70,7 @@ module Api
 
 
       def authorize_admin
-        render json: {message: "Access denied"}  unless current_user&.email == 'admin@example.com'
+        render json: {message: "Access denied"}  unless current_user&.email ==  ENV['ADMIN_EMAIL']
       end
 
 
