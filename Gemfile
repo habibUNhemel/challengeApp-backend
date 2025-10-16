@@ -42,3 +42,7 @@ group :development, :test do
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
   gem "brakeman", require: false
 end
+
+gem "devise", "~> 4.9"
+gem 'rack-cors'
+gem 'devise-jwt'
