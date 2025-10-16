@@ -1,7 +1,9 @@
 module Api
   module V1
     class ChallengesController < ApplicationController
-      before_action :set_challenge, only: [:show, :update]
+      before_action :authenticate_user!, only: %i[create update destroy]
+      before_action :set_challenge, only: %i[show update destroy]
+      before_action :authorize_admin, only: %i[create update destroy]
 
       # GET api/v1/challenges
       def index
@@ -23,9 +25,16 @@ module Api
 
       # POST api/v1/challenges
       def create
-        # Create single challenge
-        @challenge = Challenge.new(challenge_params)
-        
+
+        # puts 'RRRRRR'
+        # puts current_user.id
+        # puts current_user.email
+        # puts 'RRRRRR'
+        # # Create single challenge
+        # @challenge = Challenge.new(challenge_params.merge(user_id: current_user.id))
+
+
+        @challenge = current_user.challenges.build(challenge_params)
         if @challenge.save
           render json: @challenge, status: :created
         else
@@ -56,6 +65,13 @@ module Api
       end
 
       private
+
+
+      def authorize_admin
+        render json: {message: "Access denied"}  unless current_user&.email == 'admin@example.com'
+      end
+
+
 
       def set_challenge
         @challenge = Challenge.find(params[:id])
